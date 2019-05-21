@@ -50,4 +50,4 @@ style.css.map
 
 # Environmental Variables #
 ######################
-.env
+config.js
