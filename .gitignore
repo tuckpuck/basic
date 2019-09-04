@@ -38,7 +38,7 @@ Thumbs.db
 
 # VS Code #
 ######################
-.vscode/settings.json
+.vscode
 
 # Node Modules #
 ######################
@@ -47,6 +47,10 @@ node_modules/
 # SASS #
 ######################
 style.css.map
+
+# eslint #
+######################
+.eslintrc.js
 
 # Environmental Variables #
 ######################
