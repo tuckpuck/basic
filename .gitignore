@@ -38,7 +38,7 @@ Thumbs.db
 
 # VS Code #
 ######################
-.vscode
+.vscode/
 
 # Node Modules #
 ######################
