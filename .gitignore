@@ -55,3 +55,7 @@ style.css.map
 # Environmental Variables #
 ######################
 env.js
+
+# Netlify #
+######################
+.netlify/
