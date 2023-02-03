@@ -1,14 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Document</title>
-        <link rel="stylesheet" type="text/css" href="css/normalize.css" />
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
-    </head>
-    <body></body>
-    <script src="js/config.js"></script>
-    <script src="js/js.js"></script>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+    <button class="connect-nami" id="connect-nami">Connect Nami</button>
+    <p class="receive-address" id="receive-address"></p>
+    <ul class="utxo-list" id="utxo-list">
+    </ul>
+</body>
+<script src="js/config.js"></script>
+<script src="js/js.js"></script>
+<script type="module">
+    import { config } from './js/env.js';
+    const blockfrostKey = config.BLOCKFROST_KEY
+    import { Blockfrost, Lucid } from "https://unpkg.com/lucid-cardano@0.8.8/web/mod.js"
+    const lucid = await Lucid.new(
+        new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", config.BLOCKFROST_KEY),
+        "Preprod",
+    );
+    console.log(lucid);
+
+    const namiButton = document.getElementById("connect-nami")
+    const addressField = document.getElementById("receive-address")
+    const utxoList = document.getElementById("utxo-list")
+    namiButton.addEventListener('click', function () { initializeNami() }, false);
+
+
+
+    async function initializeNami() {
+        const api = await window.cardano.nami.enable();
+        // Assumes you are in a browser environment
+        lucid.selectWallet(api);
+        const address = await lucid.wallet.address();
+        console.log(address)
+        const wallet = await lucid.wallet
+        console.log(wallet)
+        const utxos = await lucid.wallet.getUtxos();
+        console.log(utxos)
+        const numberOfUtxos = utxos.length;
+        console.log(numberOfUtxos)
+        addressField.textContent = address;
+        for (let i = 0; i <= numberOfUtxos; i++) {
+            let li = document.createElement("li");
+            li.setAttribute('id', "utxo-" + i);
+            li.appendChild(document.createTextNode("Utxo" + i + ":"));
+            li.appendChild(document.createTextNode("Utxo" + i + " address: " + utxos[i].address));
+            li.appendChild(document.createTextNode("Utxo" + i + " lovelace: " + utxos[i].assets.lovelace));
+            li.appendChild(document.createTextNode("Utxo" + i + " txhash: " + utxos[i].txHash));
+            utxoList.appendChild(li);
+        }
+    }
+
+
+
+
+    console.log(lucid)
+
+    // const { paymentCredential } = lucid.utils.getAddressDetails(
+    //     await lucid.wallet.address(),
+    // );
+
+
+
+
+    // const privateKey = lucid.utils.generatePrivateKey(); // Bech32 encoded private key
+    // console.log(privateKey);
+
+    // lucid.selectWalletFromPrivateKey(privateKey);
+
+    // const tx = await lucid.newTx()
+    //     .payToAddress("", { lovelace: 5000000n })
+    //     .payToAddress("", { lovelace: 5000000n })
+    //     .complete();
+
+    // const signedTx = await tx.sign().complete();
+    // const txHash = await signedTx.submit();
+
+    // console.log(txHash);
+
+</script>
+
+
 </html>
